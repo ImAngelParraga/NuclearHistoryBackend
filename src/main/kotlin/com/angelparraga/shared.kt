@@ -14,6 +14,14 @@ data class NTResponse(
 )
 
 @Serializable
+data class NTResponseDto(
+    val current: NTRunDto?,
+    val previous: NTRunDto?
+)
+
+fun NTResponse.toDto(): NTResponseDto = NTResponseDto(current?.toDto(), previous?.toDto())
+
+@Serializable
 data class NTRun(
     val char: Int,
     val lasthit: Int,

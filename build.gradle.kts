@@ -4,16 +4,6 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 
-configure<AppEngineAppYamlExtension> {
-    stage {
-        setArtifact("build/libs/${project.name}-all.jar")
-    }
-    deploy {
-        version = "GCLOUD_CONFIG"
-        projectId = "GCLOUD_CONFIG"
-    }
-}
-
 plugins {
     application
     kotlin("jvm") version "1.7.20"
@@ -23,20 +13,22 @@ plugins {
     id("com.google.cloud.tools.appengine") version "2.4.2"
 }
 
-ktor {
-    fatJar {
-        archiveFileName.set("fat.jar")
-    }
-}
-
-group = "com.angelparraga"
-version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 repositories {
     mavenCentral()
+}
+
+configure<AppEngineAppYamlExtension> {
+    stage {
+        setArtifact("build/libs/${project.name}-all.jar")
+    }
+    deploy {
+        version = "GCLOUD_CONFIG"
+        projectId = "GCLOUD_CONFIG"
+    }
 }
 
 dependencies {

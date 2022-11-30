@@ -1,4 +1,4 @@
-rootProject.name = "com.angelparraga.nthistorybackend"
+rootProject.name = "nthistorybackend"
 pluginManagement {
     repositories {
         gradlePluginPortal()
