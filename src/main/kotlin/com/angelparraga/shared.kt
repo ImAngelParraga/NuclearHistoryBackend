@@ -1,11 +1,22 @@
 package com.angelparraga
 
 import kotlinx.serialization.Serializable
+import java.util.UUID
+import kotlin.reflect.full.createType
+import kotlin.reflect.typeOf
 
 
 const val BASE_URL = "https://tb-api.xyz/stream/get?"
 const val MY_KEY = "CDGNSTVY4"
 const val MY_STEAMID = "76561198087280179"
+
+val string = String::class.createType()
+val int = Int::class.createType()
+val boolean = Boolean::class.createType()
+val list = typeOf<List<String>>()
+val char = Char::class.createType()
+val long = Long::class.createType()
+val uuid = UUID::class.createType()
 
 @Serializable
 data class NTResponse(
@@ -45,45 +56,93 @@ data class NTRun(
 
 @Serializable
 data class NTRunDto(
-    val char: String,
+    val character: String,
     val lastHit: String,
     val world: String,
-    val level: Int,
+    val worldLevel: Int,
     val crown: String,
     val weaponA: String,
     val weaponB: String,
     val skin: Char,
     val ultraMutation: String,
-    val charlvl: Int,
+    val characterLvl: Int,
     val loops: Int,
     val win: Boolean,
     val mutations: List<String>,
     val kills: Int,
     val health: Int,
-    val steamid: String,
+    val steamId: String,
     val type: String,
     val timestamp: Long //From seconds to milliseconds
 )
 
-fun NTRun.toDto(): NTRunDto {
+@Serializable
+data class NuclearRunDB(
+    val id: String,
+    val character: String,
+    val lastHit: String,
+    val world: String,
+    val worldLevel: Int,
+    val crown: String,
+    val weaponA: String,
+    val weaponB: String,
+    val skin: Char,
+    val ultraMutation: String,
+    val characterLvl: Int,
+    val loops: Int,
+    val win: Boolean,
+    val mutations: List<String>,
+    val kills: Int,
+    val health: Int,
+    val steamId: String,
+    val type: String,
+    val timestamp: Long
+)
+
+fun NTRun.toNuclearRunDB(): NuclearRunDB {
     val character = Character.values()[char - 1]
-    return NTRunDto(
-        char = character.charName,
+    return NuclearRunDB(
+        id = UUID.randomUUID().toString(),
+        character = character.charName,
         lastHit = Enemy.values()[lasthit + 1].enemyName,
         world = World.values().find { it.id == world }?.worldName ?: "World not found",
-        level = level,
+        worldLevel = level,
         crown = Crown.values()[crown - 1].crownName,
         weaponA = Weapon.values().find { it.id == wepA }?.weapName ?: "Weapon A not found",
         weaponB = Weapon.values().find { it.id == wepB }?.weapName ?: "Weapon B not found",
         skin = if (skin == 0) 'A' else 'B',
         ultraMutation = getUltraName(character, ultra),
-        charlvl = charlvl,
+        characterLvl = charlvl,
         loops = loops,
         win = win,
         mutations = getMutationNameList(mutations),
         kills = kills,
         health = health,
-        steamid = steamid.toString(),
+        steamId = steamid.toString(),
+        type = type,
+        timestamp = timestamp * 1000
+    )
+}
+
+fun NTRun.toDto(): NTRunDto {
+    val character = Character.values()[char - 1]
+    return NTRunDto(
+        character = character.charName,
+        lastHit = Enemy.values()[lasthit + 1].enemyName,
+        world = World.values().find { it.id == world }?.worldName ?: "World not found",
+        worldLevel = level,
+        crown = Crown.values()[crown - 1].crownName,
+        weaponA = Weapon.values().find { it.id == wepA }?.weapName ?: "Weapon A not found",
+        weaponB = Weapon.values().find { it.id == wepB }?.weapName ?: "Weapon B not found",
+        skin = if (skin == 0) 'A' else 'B',
+        ultraMutation = getUltraName(character, ultra),
+        characterLvl = charlvl,
+        loops = loops,
+        win = win,
+        mutations = getMutationNameList(mutations),
+        kills = kills,
+        health = health,
+        steamId = steamid.toString(),
         type = type,
         timestamp = timestamp * 1000
     )
