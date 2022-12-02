@@ -89,23 +89,7 @@ fun NTRun.toDto(): NTRunDto {
     )
 }
 
-private fun getUltraName(character: Character, id: Int): String {
-    return if (id > 0 || character == Character.HORROR) {
-        character.ultraMutations[id]
-    } else {
-        "None"
-    }
-}
-
-private fun getMutationNameList(mutations: String): List<String> {
-    val response = mutableListOf<String>()
-    mutations.forEachIndexed { index, c ->
-        if (c.digitToInt() == 1) response.add(Mutations.values()[index].mutationName)
-    }
-
-    return response
-}
-
+//region Enums
 /*
 1	Fish
 2	Crystal
@@ -587,6 +571,8 @@ enum class Mutations(val mutationName: String) {
     STRONG_SPIRIT("Strong Spirit"),
     OPEN_MIND("Open Mind")
 }
+
+//endregion
 
 /*
 fun main() {
