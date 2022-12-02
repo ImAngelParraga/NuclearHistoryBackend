@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 import java.lang.Exception
 
 fun Route.nuclearRouting() {
+    val dbService = DBService()
     route("/nuclear") {
         get("/{steamId}/{key}") {
             val steamId = call.parameters["steamId"] ?: throw Exception("No steamId provided.")
@@ -55,15 +56,12 @@ fun Route.nuclearRouting() {
 
         post("/testpost") {
             val data = call.receiveNullable<NTRun>() ?: throw Exception("No data provided.")
-            val db = DBService()
-            call.respondNullable(HttpStatusCode.OK, db.addNuclearRun(data.toNuclearRunDB()))
+            call.respondNullable(HttpStatusCode.OK, dbService.addNuclearRun(data.toNuclearRunDB()))
         }
 
         get("/testget") {
-            val db = DBService()
             val id = call.parameters["id"] ?: throw Exception("No id provided.")
-            db.getNuclearRunDB(id)
-            call.respondNullable(HttpStatusCode.OK, "Se puso")
+            call.respondNullable(HttpStatusCode.OK, dbService.getNuclearRunDB(id))
         }
     }
 }

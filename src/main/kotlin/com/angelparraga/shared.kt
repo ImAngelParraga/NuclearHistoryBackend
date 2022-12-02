@@ -1,22 +1,13 @@
 package com.angelparraga
 
+import io.andrewohara.dynamokt.DynamoKtPartitionKey
 import kotlinx.serialization.Serializable
-import java.util.UUID
-import kotlin.reflect.full.createType
-import kotlin.reflect.typeOf
+import java.util.*
 
 
 const val BASE_URL = "https://tb-api.xyz/stream/get?"
 const val MY_KEY = "CDGNSTVY4"
 const val MY_STEAMID = "76561198087280179"
-
-val string = String::class.createType()
-val int = Int::class.createType()
-val boolean = Boolean::class.createType()
-val list = typeOf<List<String>>()
-val char = Char::class.createType()
-val long = Long::class.createType()
-val uuid = UUID::class.createType()
 
 @Serializable
 data class NTResponse(
@@ -78,6 +69,7 @@ data class NTRunDto(
 
 
 data class NuclearRunDB(
+    @DynamoKtPartitionKey
     val id: String,
     val character: String,
     val lastHit: String,
@@ -97,7 +89,9 @@ data class NuclearRunDB(
     val steamId: String,
     val type: String,
     val timestamp: Long
-)
+) {
+    //fun getKey(): Key = Key.builder().partitionValue(id).build()
+}
 
 fun NTRun.toNuclearRunDB(): NuclearRunDB {
     val character = Character.values()[char - 1]
