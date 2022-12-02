@@ -76,7 +76,7 @@ data class NTRunDto(
     val timestamp: Long //From seconds to milliseconds
 )
 
-@Serializable
+
 data class NuclearRunDB(
     val id: String,
     val character: String,

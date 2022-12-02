@@ -53,5 +53,5 @@ dependencies {
     implementation("aws.sdk.kotlin:dynamodb:0.17.5-beta")
 
     //DynamoDB Kotlin Module
-    implementation("com.github.oharaandrew314:dynamodb-kotlin-module:Tag")
+    implementation("com.github.oharaandrew314:dynamodb-kotlin-module:0.2.1")
 }
