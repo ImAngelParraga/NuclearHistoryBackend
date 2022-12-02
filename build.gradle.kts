@@ -13,6 +13,9 @@ plugins {
     id("com.google.cloud.tools.appengine") version "2.4.2"
 }
 
+group = ""
+version = ""
+
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
@@ -44,4 +47,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-serialization-gson:$ktor_version")
+
+    //DynamoDB Kotlin SDK
+    implementation("aws.sdk.kotlin:dynamodb:0.17.5-beta")
 }
