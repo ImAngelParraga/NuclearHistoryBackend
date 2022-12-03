@@ -3,6 +3,7 @@ import com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtension
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val koin_version: String by project
 
 plugins {
     application
@@ -21,8 +22,10 @@ application {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
-    maven(url="https://jitpack.io")
+    google()
+    maven(url = "https://jitpack.io")
 }
 
 configure<AppEngineAppYamlExtension> {
@@ -54,4 +57,8 @@ dependencies {
 
     //DynamoDB Kotlin Module
     implementation("com.github.oharaandrew314:dynamodb-kotlin-module:0.2.1")
+
+    // Koin for Kotlin apps
+    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
 }
