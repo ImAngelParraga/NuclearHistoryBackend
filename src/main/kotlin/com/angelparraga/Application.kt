@@ -1,9 +1,7 @@
 package com.angelparraga
 
-import io.ktor.server.application.*
 import com.angelparraga.plugins.*
-import org.koin.dsl.module
-import org.koin.ktor.plugin.Koin
+import io.ktor.server.application.*
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -12,12 +10,6 @@ fun main(args: Array<String>): Unit =
 fun Application.module() {
     configureSerialization()
     configureRouting()
-
-    install(Koin) {
-        modules(appModule)
-    }
+    configureKoin()
 }
 
-val appModule = module {
-
-}

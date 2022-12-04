@@ -1,0 +1,68 @@
+package com.angelparraga.services.nuclear
+
+import com.angelparraga.*
+import com.angelparraga.services.db.DBService
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+
+interface NuclearService {
+    suspend fun getNTResponse(steamId: String, key: String): NTResponse?
+    suspend fun saveLastRun(steamId: String, key: String)
+    suspend fun getCurrentRun(steamId: String, key: String): NuclearRunDB
+    suspend fun getPreviousRun(steamId: String, key: String): NuclearRunDB
+}
+
+class NuclearServiceImpl(
+    private val dbService: DBService
+) : NuclearService {
+    override suspend fun getNTResponse(steamId: String, key: String): NTResponse? = withContext(Dispatchers.IO) {
+        callNuclearApiAndGetResponse(steamId, key)
+    }
+
+    override suspend fun saveLastRun(steamId: String, key: String) {
+        val run =
+            callNuclearApiAndGetResponse(steamId, key)?.previous?.toNuclearRunDB() ?: throw NuclearError.NoRunFound()
+
+        println("Saving run: $run")
+        if (!checkRunExists(run.steamId, run.runTimestamp)) {
+            dbService.addNuclearRun(run)
+        } else {
+            throw Exception("Run already exists")
+        }
+    }
+
+    override suspend fun getCurrentRun(steamId: String, key: String): NuclearRunDB = withContext(Dispatchers.IO) {
+        callNuclearApiAndGetResponse(steamId, key)?.current?.toNuclearRunDB() ?: throw NuclearError.NoRunFound()
+    }
+
+    override suspend fun getPreviousRun(steamId: String, key: String): NuclearRunDB = withContext(Dispatchers.IO) {
+        callNuclearApiAndGetResponse(steamId, key)?.previous?.toNuclearRunDB() ?: throw NuclearError.NoRunFound()
+    }
+
+    private suspend fun checkRunExists(steamId: String, timestamp: Long): Boolean =
+        dbService.getBySteamIdAndTimestamp(steamId, timestamp) != null
+
+
+    private suspend fun callNuclearApiAndGetResponse(steamId: String, key: String): NTResponse? =
+        HttpClient(CIO).use { client ->
+            val response: String = client.get(BASE_URL) {
+                url {
+                    parameters.append("s", steamId)
+                    parameters.append("key", key)
+                }
+            }.body()
+
+            val parsedResponse = Json.decodeFromString<NTResponse>(response)
+            if (parsedResponse.current != null || parsedResponse.previous != null) {
+                parsedResponse
+            } else {
+                null
+            }
+        }
+}

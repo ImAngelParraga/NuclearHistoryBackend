@@ -1,6 +1,7 @@
 package com.angelparraga
 
 import io.andrewohara.dynamokt.DynamoKtPartitionKey
+import io.andrewohara.dynamokt.DynamoKtSortKey
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -88,7 +89,8 @@ data class NuclearRunDB(
     val health: Int,
     val steamId: String,
     val type: String,
-    val timestamp: Long
+    @DynamoKtSortKey
+    val runTimestamp: Long
 ) {
     //fun getKey(): Key = Key.builder().partitionValue(id).build()
 }
@@ -114,7 +116,7 @@ fun NTRun.toNuclearRunDB(): NuclearRunDB {
         health = health,
         steamId = steamid.toString(),
         type = type,
-        timestamp = timestamp * 1000
+        runTimestamp = timestamp * 1000
     )
 }
 
