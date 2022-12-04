@@ -33,7 +33,7 @@ class NuclearServiceImpl(
         if (!checkRunExists(run.steamId, run.runTimestamp)) {
             dbService.addNuclearRun(run)
         } else {
-            throw Exception("Run already exists")
+            throw NuclearError.RunAlreadyExists()
         }
     }
 

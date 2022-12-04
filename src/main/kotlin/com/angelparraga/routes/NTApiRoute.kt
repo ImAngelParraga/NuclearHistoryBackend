@@ -22,6 +22,7 @@ fun Route.ntApiRouting() {
                     is NuclearError.NoSteamIdProvided -> call.respond(HttpStatusCode.BadRequest, e.message)
                     is NuclearError.NoKeyProvided -> call.respond(HttpStatusCode.BadRequest, e.message)
                     is NuclearError.NoRunFound -> call.respond(HttpStatusCode.NotFound, e.message)
+                    is NuclearError.RunAlreadyExists -> call.respond(HttpStatusCode.Conflict, e.message)
                     else -> call.respond(HttpStatusCode.InternalServerError, e.message ?: "Unknown error.")
                 }
             }
