@@ -61,7 +61,7 @@ fun Route.ntApiRouting() {
 }
 
 private fun getParams(call: ApplicationCall): Pair<String, String> {
-    val steamId = call.parameters["steamId"] ?: throw NuclearError.NoSteamIdProvided()
+    val steamId = call.parameters["steamid"] ?: throw NuclearError.NoSteamIdProvided()
     val key = call.parameters["key"] ?: throw NuclearError.NoKeyProvided()
     return Pair(steamId, key)
 }
