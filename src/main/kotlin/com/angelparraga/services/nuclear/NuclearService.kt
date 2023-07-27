@@ -1,14 +1,13 @@
 package com.angelparraga.services.nuclear
 
 import com.angelparraga.*
-import com.angelparraga.services.db.DBService
+import com.angelparraga.services.db.NuclearRunDAO
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 interface NuclearService {
@@ -19,7 +18,7 @@ interface NuclearService {
 }
 
 class NuclearServiceImpl(
-    private val dbService: DBService
+    private val nuclearRunDAO: NuclearRunDAO
 ) : NuclearService {
     override suspend fun getNTResponse(steamId: String, key: String): NTResponse? = withContext(Dispatchers.IO) {
         callNuclearApiAndGetResponse(steamId, key)
@@ -31,7 +30,7 @@ class NuclearServiceImpl(
 
         println("Saving run: $run")
         if (!checkRunExists(run.steamId, run.runTimestamp)) {
-            dbService.addNuclearRun(run)
+            nuclearRunDAO.addNuclearRun(run)
         } else {
             throw NuclearError.RunAlreadyExists()
         }
@@ -46,7 +45,7 @@ class NuclearServiceImpl(
     }
 
     private suspend fun checkRunExists(steamId: String, timestamp: Long): Boolean =
-        dbService.getBySteamIdAndTimestamp(steamId, timestamp) != null
+        nuclearRunDAO.findBySteamIdAndTimestamp(steamId, timestamp) != null
 
 
     private suspend fun callNuclearApiAndGetResponse(steamId: String, key: String): NTResponse? =

@@ -7,10 +7,10 @@ val koin_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.7.20"
-    id("io.ktor.plugin") version "2.1.3"
+    kotlin("jvm") version "1.9.0"
+    id("io.ktor.plugin") version "2.3.2"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
     id("com.google.cloud.tools.appengine") version "2.4.2"
 }
 
@@ -52,13 +52,10 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-serialization-gson:$ktor_version")
 
-    //DynamoDB Kotlin SDK
-    implementation("aws.sdk.kotlin:dynamodb:0.17.5-beta")
-
-    //DynamoDB Kotlin Module
-    implementation("com.github.oharaandrew314:dynamodb-kotlin-module:0.2.1")
-
     // Koin for Kotlin apps
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+
+    // Mongo
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.10.1")
 }
