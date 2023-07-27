@@ -1,7 +1,7 @@
 package com.angelparraga.plugins
 
-import com.angelparraga.services.db.DBService
-import com.angelparraga.services.db.DBServiceImpl
+import com.angelparraga.services.db.NuclearRunDAO
+import com.angelparraga.services.db.MongoNuclearRunDAO
 import com.angelparraga.services.nuclear.NuclearService
 import com.angelparraga.services.nuclear.NuclearServiceImpl
 import io.ktor.server.application.*
@@ -15,6 +15,6 @@ fun Application.configureKoin() {
 }
 
 val appModule = module {
-    single<DBService> { DBServiceImpl() }
+    single<NuclearRunDAO> { MongoNuclearRunDAO() }
     single<NuclearService> { NuclearServiceImpl(get()) }
 }

@@ -1,9 +1,10 @@
+@file:Suppress("unused")
+
 package com.angelparraga
 
-import io.andrewohara.dynamokt.DynamoKtPartitionKey
-import io.andrewohara.dynamokt.DynamoKtSortKey
 import kotlinx.serialization.Serializable
-import java.util.*
+import org.bson.codecs.pojo.annotations.BsonId
+import org.bson.types.ObjectId
 
 
 const val BASE_URL = "https://tb-api.xyz/stream/get?"
@@ -15,14 +16,6 @@ data class NTResponse(
     val current: NTRun?,
     val previous: NTRun?
 )
-
-@Serializable
-data class NTResponseDto(
-    val current: NTRunDto?,
-    val previous: NTRunDto?
-)
-
-fun NTResponse.toDto(): NTResponseDto = NTResponseDto(current?.toDto(), previous?.toDto())
 
 @Serializable
 data class NTRun(
@@ -48,6 +41,7 @@ data class NTRun(
 
 @Serializable
 data class NTRunDto(
+    val runId: String, // Hex string from ObjectId()
     val character: String,
     val lastHit: String,
     val world: String,
@@ -68,10 +62,9 @@ data class NTRunDto(
     val timestamp: Long //From seconds to milliseconds
 )
 
-
 data class NuclearRunDB(
-    @DynamoKtPartitionKey
-    val id: String,
+    @BsonId
+    val id: ObjectId,
     val character: String,
     val lastHit: String,
     val world: String,
@@ -89,23 +82,22 @@ data class NuclearRunDB(
     val health: Int,
     val steamId: String,
     val type: String,
-    @DynamoKtSortKey
     val runTimestamp: Long
 ) {
     //fun getKey(): Key = Key.builder().partitionValue(id).build()
 }
 
 fun NTRun.toNuclearRunDB(): NuclearRunDB {
-    val character = Character.values()[char - 1]
+    val character = Character.entries[char - 1]
     return NuclearRunDB(
-        id = UUID.randomUUID().toString(),
+        id = ObjectId(),
         character = character.charName,
-        lastHit = Enemy.values()[lasthit + 1].enemyName,
-        world = World.values().find { it.id == world }?.worldName ?: "World not found",
+        lastHit = Enemy.entries[lasthit + 1].enemyName,
+        world = World.entries.find { it.id == world }?.worldName ?: "World not found",
         worldLevel = level,
-        crown = Crown.values()[crown - 1].crownName,
-        weaponA = Weapon.values().find { it.id == wepA }?.weapName ?: "Weapon A not found",
-        weaponB = Weapon.values().find { it.id == wepB }?.weapName ?: "Weapon B not found",
+        crown = Crown.entries[crown - 1].crownName,
+        weaponA = Weapon.entries.find { it.id == wepA }?.weapName ?: "Weapon A not found",
+        weaponB = Weapon.entries.find { it.id == wepB }?.weapName ?: "Weapon B not found",
         skin = if (skin == 0) 'A' else 'B',
         ultraMutation = getUltraName(character, ultra),
         characterLvl = charlvl,
@@ -120,29 +112,27 @@ fun NTRun.toNuclearRunDB(): NuclearRunDB {
     )
 }
 
-fun NTRun.toDto(): NTRunDto {
-    val character = Character.values()[char - 1]
-    return NTRunDto(
-        character = character.charName,
-        lastHit = Enemy.values()[lasthit + 1].enemyName,
-        world = World.values().find { it.id == world }?.worldName ?: "World not found",
-        worldLevel = level,
-        crown = Crown.values()[crown - 1].crownName,
-        weaponA = Weapon.values().find { it.id == wepA }?.weapName ?: "Weapon A not found",
-        weaponB = Weapon.values().find { it.id == wepB }?.weapName ?: "Weapon B not found",
-        skin = if (skin == 0) 'A' else 'B',
-        ultraMutation = getUltraName(character, ultra),
-        characterLvl = charlvl,
-        loops = loops,
-        win = win,
-        mutations = getMutationNameList(mutations),
-        kills = kills,
-        health = health,
-        steamId = steamid.toString(),
-        type = type,
-        timestamp = timestamp * 1000
-    )
-}
+fun NuclearRunDB.toNTRunDto(): NTRunDto = NTRunDto(
+    id.toString(),
+    character,
+    lastHit,
+    world,
+    worldLevel,
+    crown,
+    weaponA,
+    weaponB,
+    skin,
+    ultraMutation,
+    characterLvl,
+    loops,
+    win,
+    mutations,
+    kills,
+    health,
+    steamId,
+    type,
+    runTimestamp
+)
 
 //region Enums
 /*

@@ -12,7 +12,7 @@ fun Route.ntApiRouting() {
     val nuclearService: NuclearService by inject()
 
     route("/api") {
-        get("/savelastrun") {
+        get("/save-last-run") {
             try {
                 val (steamId, key) = getParams(call)
                 nuclearService.saveLastRun(steamId, key)
