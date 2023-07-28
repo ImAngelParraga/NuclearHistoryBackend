@@ -11,7 +11,7 @@ interface PartnerDAO {
     suspend fun getPartner(partnerId: String): Partner?
 }
 
-class PartnerDAOImpl() : PartnerDAO {
+class PartnerDAOImpl : PartnerDAO {
     private val partnerCollection = DatabaseFactory.dbNTHistory.getCollection<Partner>("partners")
 
     override suspend fun getPartner(partnerId: String): Partner? = dbQuery {
