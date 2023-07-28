@@ -14,6 +14,6 @@ fun Application.authentication() {
     }
 }
 
-fun validate(credentials: UserPasswordCredential): Principal? {
+private fun validate(credentials: UserPasswordCredential): Principal? {
     TODO("Create service to access db and check credentials")
 }
