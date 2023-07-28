@@ -11,5 +11,6 @@ fun Application.module() {
     configureSerialization()
     configureRouting()
     configureKoin()
+    authentication()
 }
 

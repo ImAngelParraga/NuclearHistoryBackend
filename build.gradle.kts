@@ -58,4 +58,7 @@ dependencies {
 
     // Mongo
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.10.1")
+
+    // Auth
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
 }
