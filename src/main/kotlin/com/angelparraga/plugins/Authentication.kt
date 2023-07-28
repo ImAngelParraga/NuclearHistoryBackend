@@ -1,6 +1,5 @@
 package com.angelparraga.plugins
 
-import com.angelparraga.services.auth.Partner
 import com.angelparraga.services.auth.PartnerDAO
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
