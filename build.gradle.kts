@@ -31,7 +31,7 @@ repositories {
 
 configure<AppEngineAppYamlExtension> {
     stage {
-        setArtifact("build/libs/${project.name}-all.jar")
+        setArtifact("build/libs/${project.name}-${project.version}-all.jar")
     }
     deploy {
         version = "GCLOUD_CONFIG"

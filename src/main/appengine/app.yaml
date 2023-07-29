@@ -1,2 +1,2 @@
-runtime: java17
+runtime: java11
 entrypoint: 'java -jar nthistorybackend-1.0-all.jar'
