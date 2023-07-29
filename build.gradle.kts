@@ -19,7 +19,7 @@ group = ""
 version = "1.0"
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("com.angelparraga.ApplicationKt")
 }
 
 repositories {
@@ -31,7 +31,7 @@ repositories {
 
 configure<AppEngineAppYamlExtension> {
     stage {
-        setArtifact("build/libs/${project.name}-${project.version}-all.jar")
+        setArtifact("build/libs/${project.name}-all.jar")
     }
     deploy {
         version = "GCLOUD_CONFIG"
