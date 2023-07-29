@@ -20,6 +20,7 @@ interface NuclearRunDAO {
 
 class MongoNuclearRunDAO : NuclearRunDAO {
     private val runsCollection = dbNTHistory.getCollection<NuclearRunDB>("runs")
+
     override suspend fun findById(id: String): NTRunDto? = dbQuery {
         val nuclearRunDB = runsCollection.find(eq("_id", ObjectId(id))).firstOrNull()
         nuclearRunDB?.toNTRunDto()
