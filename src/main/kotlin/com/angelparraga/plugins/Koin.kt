@@ -16,6 +16,7 @@ import java.io.File
 fun Application.configureKoin() {
 
     install(Koin) {
+        val storagePath = environment.config.property("storage.ehcacheFilePath").getString()
         val appModule = module {
             single<NuclearRunDAO> { MongoNuclearRunDAO() }
             single<NuclearService> { NuclearServiceImpl(get()) }
@@ -23,7 +24,7 @@ fun Application.configureKoin() {
             single<PartnerDAO> {
                 PartnerDAOCacheImpl(
                     get(),
-                    File(environment.config.property("storage.ehcacheFilePath").getString())
+                    File(storagePath)
                 )
             }
         }
