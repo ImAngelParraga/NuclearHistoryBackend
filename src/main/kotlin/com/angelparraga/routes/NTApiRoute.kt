@@ -1,6 +1,6 @@
 package com.angelparraga.routes
 
-import com.angelparraga.*
+import com.angelparraga.NuclearError
 import com.angelparraga.services.nuclear.NuclearService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -15,8 +15,8 @@ fun Route.ntApiRouting() {
         get("/save-last-run") {
             try {
                 val (steamId, key) = getParams(call)
-                nuclearService.saveLastRun(steamId, key)
-                call.respond(HttpStatusCode.OK, "Success")
+                val insertedId = nuclearService.saveLastRun(steamId, key)
+                call.respond(HttpStatusCode.OK, insertedId)
             } catch (e: Exception) {
                 when (e) {
                     is NuclearError.NoSteamIdProvided -> call.respond(HttpStatusCode.BadRequest, e.message)

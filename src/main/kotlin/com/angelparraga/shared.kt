@@ -64,7 +64,7 @@ data class NTRunDto(
 
 data class NuclearRunDB(
     @BsonId
-    val id: ObjectId,
+    val id: ObjectId? = null,
     val character: String,
     val lastHit: String,
     val world: String,
@@ -90,7 +90,6 @@ data class NuclearRunDB(
 fun NTRun.toNuclearRunDB(): NuclearRunDB {
     val character = Character.entries[char - 1]
     return NuclearRunDB(
-        id = ObjectId(),
         character = character.charName,
         lastHit = Enemy.entries[lasthit + 1].enemyName,
         world = World.entries.find { it.id == world }?.worldName ?: "World not found",

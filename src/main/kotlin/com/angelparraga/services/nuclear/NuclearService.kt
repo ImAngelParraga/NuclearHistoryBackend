@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 interface NuclearService {
     suspend fun getNTResponse(steamId: String, key: String): NTResponse?
-    suspend fun saveLastRun(steamId: String, key: String)
+    suspend fun saveLastRun(steamId: String, key: String): String
     suspend fun getCurrentRun(steamId: String, key: String): NuclearRunDB
     suspend fun getPreviousRun(steamId: String, key: String): NuclearRunDB
 }
@@ -24,13 +24,13 @@ class NuclearServiceImpl(
         callNuclearApiAndGetResponse(steamId, key)
     }
 
-    override suspend fun saveLastRun(steamId: String, key: String) {
+    override suspend fun saveLastRun(steamId: String, key: String): String {
         val run =
             callNuclearApiAndGetResponse(steamId, key)?.previous?.toNuclearRunDB() ?: throw NuclearError.NoRunFound()
 
         println("Saving run: $run")
         if (!checkRunExists(run.steamId, run.runTimestamp)) {
-            nuclearRunDAO.addNuclearRun(run)
+            return nuclearRunDAO.addNuclearRun(run)
         } else {
             throw NuclearError.RunAlreadyExists()
         }
