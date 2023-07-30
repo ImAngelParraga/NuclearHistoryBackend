@@ -71,4 +71,8 @@ dependencies {
 
     // Cache
     implementation("org.ehcache:ehcache:$ehcache_version")
+
+    // Call logging
+    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
+    implementation("io.ktor:ktor-server-double-receive:$ktor_version")
 }
