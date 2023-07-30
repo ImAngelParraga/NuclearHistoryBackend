@@ -8,29 +8,20 @@ import com.angelparraga.services.db.NuclearRunDAO
 import com.angelparraga.services.nuclear.NuclearService
 import com.angelparraga.services.nuclear.NuclearServiceImpl
 import io.ktor.server.application.*
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
-import java.io.File
 
 fun Application.configureKoin() {
 
     install(Koin) {
-        val storagePath = environment.config.property("storage.ehcacheFilePath").getString()
-        val appModule = module {
-            single<NuclearRunDAO> { MongoNuclearRunDAO() }
-            single<NuclearService> { NuclearServiceImpl(get()) }
-            singleOf(::PartnerDAOImpl)
-            single<PartnerDAO> {
-                PartnerDAOCacheImpl(
-                    get(),
-                    File(storagePath)
-                )
-            }
-        }
-
         modules(appModule)
     }
 
 }
 
+val appModule = module {
+    single<NuclearRunDAO> { MongoNuclearRunDAO() }
+    single<NuclearService> { NuclearServiceImpl(get()) }
+    single { PartnerDAOImpl() }
+    single<PartnerDAO> { PartnerDAOCacheImpl(get()) }
+}

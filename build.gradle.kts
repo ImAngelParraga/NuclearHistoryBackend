@@ -12,7 +12,7 @@ plugins {
     id("io.ktor.plugin") version "2.3.2"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
-    id("com.google.cloud.tools.appengine") version "2.4.2"
+    id("com.google.cloud.tools.appengine") version "2.4.3"
 }
 
 group = ""
@@ -27,6 +27,12 @@ repositories {
     mavenCentral()
     google()
     maven(url = "https://jitpack.io")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 configure<AppEngineAppYamlExtension> {
