@@ -1,9 +1,6 @@
 package com.angelparraga
 
-import com.angelparraga.plugins.authentication
-import com.angelparraga.plugins.configureKoin
-import com.angelparraga.plugins.configureRouting
-import com.angelparraga.plugins.configureSerialization
+import com.angelparraga.plugins.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>): Unit =
@@ -13,6 +10,8 @@ fun main(args: Array<String>): Unit =
 fun Application.module() {
     configureSerialization()
     configureKoin()
+    configureDoubleReceive()
+    configureLogging()
     authentication()
     configureRouting()
 }
