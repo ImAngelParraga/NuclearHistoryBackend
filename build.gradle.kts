@@ -75,4 +75,7 @@ dependencies {
     // Call logging
     implementation("io.ktor:ktor-server-call-logging:$ktor_version")
     implementation("io.ktor:ktor-server-double-receive:$ktor_version")
+
+    // CORS
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
 }
