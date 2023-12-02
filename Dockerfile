@@ -1,10 +1,10 @@
-FROM gradle:7-jdk18 AS build
+FROM gradle:7-jdk11 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
-FROM openjdk:18
+FROM openjdk:11
 EXPOSE 8080:8080
 RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/nuclear-throne-server.jar
-ENTRYPOINT ["java","-jar","/app/nuclear-throne-server.jar"]
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/nt-server.jar
+ENTRYPOINT ["java","-jar","/app/nt-server.jar"]
