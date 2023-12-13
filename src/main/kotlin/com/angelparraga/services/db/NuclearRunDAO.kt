@@ -20,6 +20,7 @@ interface NuclearRunDAO {
     suspend fun findById(id: String): NTRunDto?
     suspend fun addNuclearRun(run: NuclearRunDB): String
     suspend fun findAll(steamId: String): List<NTRunDto>
+    suspend fun findAllPaginated(steamId: String, page: Int, pageSize: Int): List<NTRunDto>
     suspend fun findBySteamIdAndTimestamp(steamId: String, timestamp: Long): NuclearRunDB?
 }
 
@@ -37,6 +38,19 @@ class MongoNuclearRunDAO : NuclearRunDAO {
 
     override suspend fun findAll(steamId: String): List<NTRunDto> = dbQuery {
         runsCollection.find(eq(NuclearRunDB::steamId.name, steamId)).map { it.toNTRunDto() }.toList()
+    }
+
+    override suspend fun findAllPaginated(
+        steamId: String,
+        page: Int,
+        pageSize: Int
+    ): List<NTRunDto> = dbQuery {
+        runsCollection
+            .find(eq(NuclearRunDB::steamId.name, steamId))
+            .skip(page * pageSize)
+            .limit(pageSize)
+            .map { it.toNTRunDto() }
+            .toList()
     }
 
     override suspend fun findBySteamIdAndTimestamp(steamId: String, timestamp: Long): NuclearRunDB? = dbQuery {

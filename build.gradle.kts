@@ -64,7 +64,7 @@ dependencies {
     implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
 
     // Mongo
-    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.10.1")
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.0")
 
     // Auth
     implementation("io.ktor:ktor-server-auth:$ktor_version")

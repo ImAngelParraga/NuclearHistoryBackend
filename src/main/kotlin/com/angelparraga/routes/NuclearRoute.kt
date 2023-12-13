@@ -38,5 +38,20 @@ fun Route.nuclearRouting() {
                 }
             }
         }
+
+        get("/runs/paginated") {
+            try {
+                val steamId = call.parameters["steamId"] ?: throw NuclearError.NoSteamIdProvided()
+                val page = call.parameters["page"]?.toInt() ?: 0
+                val pageSize = call.parameters["pageSize"]?.toInt() ?: 10
+                val runs = nuclearRunDAO.findAllPaginated(steamId, page, pageSize)
+                call.respond(HttpStatusCode.OK, runs)
+            } catch (e: Exception) {
+                when (e) {
+                    is NuclearError.NoSteamIdProvided -> call.respond(HttpStatusCode.BadRequest, e.message)
+                    else -> call.respond(HttpStatusCode.InternalServerError, e.message ?: "Unknown error.")
+                }
+            }
+        }
     }
 }
