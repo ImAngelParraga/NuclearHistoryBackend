@@ -5,6 +5,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val koin_version: String by project
 val ehcache_version: String by project
+val mockkVersion: String by project
 
 plugins {
     application
@@ -78,4 +79,8 @@ dependencies {
 
     // CORS
     implementation("io.ktor:ktor-server-cors:$ktor_version")
+
+    // Mockk
+    testImplementation("io.mockk:mockk:${mockkVersion}")
+
 }
