@@ -2,6 +2,7 @@ package com.angelparraga.services.nuclear
 
 import com.angelparraga.*
 import com.angelparraga.services.db.NuclearRunDAO
+import com.angelparraga.services.db.UserDAO
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -18,7 +19,8 @@ interface NuclearService {
 }
 
 class NuclearServiceImpl(
-    private val nuclearRunDAO: NuclearRunDAO
+    private val nuclearRunDAO: NuclearRunDAO,
+    private val userDAO: UserDAO
 ) : NuclearService {
     override suspend fun getNTResponse(steamId: String, key: String): NTResponse? = withContext(Dispatchers.IO) {
         callNuclearApiAndGetResponse(steamId, key)
@@ -30,6 +32,7 @@ class NuclearServiceImpl(
 
         println("Saving run: $run")
         if (!checkRunExists(run.steamId, run.runTimestamp)) {
+            userDAO.increaseCharacterRuns(run.steamId, run.character)
             return nuclearRunDAO.addNuclearRun(run)
         } else {
             throw NuclearError.RunAlreadyExists()

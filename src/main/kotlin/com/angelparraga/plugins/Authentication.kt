@@ -1,6 +1,6 @@
 package com.angelparraga.plugins
 
-import com.angelparraga.services.auth.PartnerDAO
+import com.angelparraga.services.db.PartnerDAO
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import org.koin.ktor.ext.inject

@@ -2,6 +2,7 @@ package com.angelparraga.plugins
 
 import com.angelparraga.routes.ntApiRouting
 import com.angelparraga.routes.nuclearRouting
+import com.angelparraga.routes.statsRouting
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
@@ -12,6 +13,7 @@ fun Application.configureRouting() {
         authenticate {
             ntApiRouting()
             nuclearRouting()
+            statsRouting()
             get("/") {
                 call.respondText("Hello World!")
             }

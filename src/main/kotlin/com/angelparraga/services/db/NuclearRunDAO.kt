@@ -7,6 +7,7 @@ import com.angelparraga.services.db.DatabaseFactory.dbQuery
 import com.angelparraga.toNTRunDto
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Filters.eq
+import com.mongodb.client.model.Filters.gt
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -22,6 +23,7 @@ interface NuclearRunDAO {
     suspend fun findAll(steamId: String): List<NTRunDto>
     suspend fun findAllPaginated(steamId: String, page: Int, pageSize: Int): List<NTRunDto>
     suspend fun findBySteamIdAndTimestamp(steamId: String, timestamp: Long): NuclearRunDB?
+    suspend fun findBySteamIdAndTimestampGreaterThan(steamId: String, timestamp: Long): List<NTRunDto>
 }
 
 class MongoNuclearRunDAO : NuclearRunDAO {
@@ -58,5 +60,14 @@ class MongoNuclearRunDAO : NuclearRunDAO {
             Filters.and(eq(NuclearRunDB::runTimestamp.name, timestamp), eq(NuclearRunDB::steamId.name, steamId))
         runsCollection.find(filter).firstOrNull()
     }
+
+    override suspend fun findBySteamIdAndTimestampGreaterThan(steamId: String, timestamp: Long): List<NTRunDto> =
+        dbQuery {
+            val filter = Filters.and(
+                eq(NuclearRunDB::steamId.name, steamId),
+                gt(NuclearRunDB::runTimestamp.name, timestamp)
+            )
+            runsCollection.find(filter).map { it.toNTRunDto() }.toList()
+        }
 
 }

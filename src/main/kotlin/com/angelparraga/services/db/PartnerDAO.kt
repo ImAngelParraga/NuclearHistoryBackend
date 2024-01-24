@@ -1,6 +1,5 @@
-package com.angelparraga.services.auth
+package com.angelparraga.services.db
 
-import com.angelparraga.services.db.DatabaseFactory
 import com.angelparraga.services.db.DatabaseFactory.dbQuery
 import com.mongodb.client.model.Filters.eq
 import kotlinx.coroutines.flow.firstOrNull

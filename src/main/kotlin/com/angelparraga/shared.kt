@@ -420,7 +420,11 @@ enum class World(val id: Int, val worldName: String) {
     THE_PALACE(7, "The Palace"),
     CAMPFIRE(0, "Campfire"),
     YV_CRIB(107, "Y.V's Crib"),
-    IDPD_HEADQUARTERS(106, "I.D.P.D. Headquarters")
+    IDPD_HEADQUARTERS(106, "I.D.P.D. Headquarters");
+
+    companion object {
+        fun fromWorldName(worldName: String) = entries.firstOrNull { it.worldName == worldName }
+    }
 }
 
 /*
