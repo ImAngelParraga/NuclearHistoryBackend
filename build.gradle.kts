@@ -9,7 +9,7 @@ val mockkVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.22"
     id("io.ktor.plugin") version "2.3.2"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
@@ -17,7 +17,7 @@ plugins {
 }
 
 group = ""
-version = "1.0"
+version = "1.1"
 
 application {
     mainClass.set("com.angelparraga.ApplicationKt")
@@ -32,8 +32,12 @@ repositories {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = "18"
+        jvmTarget = "17"
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 configure<AppEngineAppYamlExtension> {
